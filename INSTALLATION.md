@@ -91,3 +91,26 @@ npm i --save-dev @types/express-session
 ```bash
 npm i axios
 ```
+
+
+# Deploy Vercel
+
+copy vercel.json to new porject
+
+edit package.json file
+
+npm run build
+
+vercel login
+
+vercel --prod
+
+
+Set up and deploy “/var/www/html/Programming-Hero/Level-2 (Next Web Devleopment)/Mission-5/Module-34/digital-wallet-api”? yes
+? Which scope should contain your project? irfanchowdhury's projects
+? Link to existing project? no
+? What’s your project’s name? digital-wallet-api
+? In which directory is your code located? ./
+  🔗  Linked to irfanchowdhurys-projects/digital-wallet-api (created .vercel and added it to .gitignore)
+  🔍  Inspect: https://vercel.com/irfanchowdhurys-projects/digital-wallet-api/EQgLhDmckzWKVDjsd9sfKK2PVRsT [5s]
+  ✅  Production: https://digital-wallet-41np0hms7-irfanchowdhurys-projects.vercel.app
