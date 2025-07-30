@@ -38,6 +38,7 @@ app.get("/", (req:Request, res:Response) => {
 });
 
 
+
 // 1st Approch
 // app.use((error:any, req: Request, res: Response, next: NextFunction) => {    
 //     res.status(500).json({

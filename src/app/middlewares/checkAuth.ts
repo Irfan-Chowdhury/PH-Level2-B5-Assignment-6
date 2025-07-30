@@ -8,7 +8,7 @@ import { IsActive } from "../modules/user/user.interface";
 import httpStatus from "http-status-codes";
 
 export const checkAuth = (...authRoles: string[]) => async (req: Request, res: Response, next: NextFunction) => {
-
+    
     try {
         const accessToken = req.headers.authorization;
 
@@ -16,11 +16,9 @@ export const checkAuth = (...authRoles: string[]) => async (req: Request, res: R
             throw new AppError(403, "No Token Received")
         }
 
-
         const verifiedToken = verifyToken(accessToken, envVars.JWT_ACCESS_SECRET) as JwtPayload
 
-        const isUserExist = await User.findOne({ email: verifiedToken.email })
-
+        const isUserExist = await User.findOne({ email: verifiedToken.email });
         if (!isUserExist) {
             throw new AppError(httpStatus.BAD_REQUEST, "User does not exist")
         }
@@ -37,6 +35,7 @@ export const checkAuth = (...authRoles: string[]) => async (req: Request, res: R
             throw new AppError(403, "You are not permitted to view this route!!!")
         }
         req.user = verifiedToken;
+
         next();
 
     } catch (error) {

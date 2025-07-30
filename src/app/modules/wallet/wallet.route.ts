@@ -1,0 +1,50 @@
+import express from 'express';
+import { WalletController } from './wallet.controller';
+import { checkAuth } from '../../middlewares/checkAuth';
+import { Role } from '../user/user.interface';
+import { validateRequest } from '../../middlewares/validateRequest';
+import { WalletValidation } from './wallet.validation';
+// import { auth } from '../../middlewares/auth';
+// import { USER_ROLE } from '../../../enums/user';
+// import validateRequest from '../../middlewares/validateRequest';
+// import { WalletValidation } from './wallet.validation';
+
+const router = express.Router();
+
+router.get('/my-wallet', 
+    checkAuth(Role.ADMIN, Role.SUPER_ADMIN),
+    WalletController.getMyWallet);
+
+
+router.post(
+    '/add-money',
+    checkAuth(Role.USER),
+    validateRequest(WalletValidation.addMoneyZodSchema),
+    WalletController.addMoney
+);
+router.post(
+    '/withdraw-money',
+    checkAuth(Role.USER),
+    validateRequest(WalletValidation.withdrawMoneyZodSchema),
+    WalletController.withdrawMoney
+);
+router.post(
+    '/send-money',
+    checkAuth(Role.USER),
+    // validateRequest(WalletValidation.sendMoneyZodSchema),
+    WalletController.sendMoney
+);
+router.post(
+    '/cash-in',
+    checkAuth(Role.AGENT),
+    validateRequest(WalletValidation.cashInZodSchema),
+    WalletController.cashIn
+);
+router.post(
+    '/cash-out',
+    checkAuth(Role.AGENT),
+    validateRequest(WalletValidation.cashOutZodSchema),
+    WalletController.cashOut
+);
+
+export const WalletRoutes = router;

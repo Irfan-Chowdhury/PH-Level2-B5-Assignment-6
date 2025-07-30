@@ -31,7 +31,7 @@ app.use((0, cors_1.default)({
 app.use("/api/v1", routes_1.router);
 app.get("/", (req, res) => {
     res.status(200).json({
-        message: "Welcome to Tour Management System Backend"
+        message: "Welcome to Digital Wallet API",
     });
 });
 // 1st Approch
