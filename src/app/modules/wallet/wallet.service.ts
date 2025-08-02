@@ -285,6 +285,28 @@ const getAllWallets = async () => {
     };
 }
 
+const blockWallet = async (walletId: string): Promise<IWallet> => {
+    const wallet = await Wallet.findOneAndUpdate(
+      { _id: walletId },
+      { isBlocked: true },
+      { new: true }
+    );
+    if (!wallet) throw new AppError(httpStatus.NOT_FOUND, 'Wallet not found');
+    return wallet;
+  };
+  
+
+const unBlockWallet = async (walletId: string): Promise<IWallet> => {
+    const wallet = await Wallet.findOneAndUpdate(
+      { _id: walletId },
+      { isBlocked: false },
+      { new: true }
+    );
+    if (!wallet) throw new AppError(httpStatus.NOT_FOUND, 'Wallet not found');
+    return wallet;
+  };
+  
+
 export const WalletService = {
     addMoney,
     withdrawMoney,
@@ -292,5 +314,7 @@ export const WalletService = {
     cashIn,
     cashOut,
     getMyWallet,
-    getAllWallets
+    getAllWallets,
+    blockWallet,
+    unBlockWallet
 };

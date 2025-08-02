@@ -56,4 +56,16 @@ router.get(
     WalletController.getAllWallet
 );
 
+router.get(
+    "/block/:id",
+    checkAuth(Role.ADMIN),
+    WalletController.blockWallet
+);
+
+router.get(
+    "/unblock/:id",
+    checkAuth(Role.ADMIN),
+    WalletController.unblockWallet
+);
+
 export const WalletRoutes = router;
