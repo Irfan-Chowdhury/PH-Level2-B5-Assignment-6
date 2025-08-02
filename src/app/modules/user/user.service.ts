@@ -5,11 +5,12 @@ import { User } from "./user.model";
 import httpStatus from "http-status-codes";
 import bcryptjs from "bcryptjs";
 import { JwtPayload } from "jsonwebtoken";
+import { Wallet } from "../wallet/wallet.model";
 
 
 const createUser =  async (payload: Partial<IUser>) => {
 
-    const {email, password, ...rest} = payload;
+    const {email, password, role, ...rest} = payload;
 
     const isUserExist = await User.findOne({email});
 
@@ -17,19 +18,25 @@ const createUser =  async (payload: Partial<IUser>) => {
         throw new AppError(httpStatus.BAD_REQUEST, "User Already Exists");
     }
 
-    // const hashedPassword = await bcryptjs.hash(password as string, 10);
     const hashedPassword = await bcryptjs.hash(password as string, Number(envVars.BCRYPT_SALT_ROUND))
 
     const authProvider: IAuthProvider = {provider: "credentials", providerId: email as string}
 
     const user = await User.create({
+        role,
         email,
         password: hashedPassword,
         auths: [authProvider],
         ...rest
     })
 
-    // const user = await User.create(payload);
+    if (user.role=== Role.USER || user.role=== Role.AGENT ) {
+        await Wallet.create({
+            user: user._id,
+            balance: 50,
+            isBlocked: false,
+        });
+    }
 
     return user;
 }

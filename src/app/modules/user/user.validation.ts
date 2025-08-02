@@ -37,7 +37,11 @@ export const createUserZodSchema = z.object({
         // .string({ invalid_type_error: "Address must be string" })
         .string()
         .max(200, { message: "Address cannot exceed 200 characters." })
-        .optional()
+        .optional(),
+    role: z
+        .string()
+        .min(2, { message: "Role must be at least 2 characters long." })
+        .max(50, { message: "Role cannot exceed 50 characters." }),
 });
 
 

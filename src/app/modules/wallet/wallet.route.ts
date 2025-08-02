@@ -40,6 +40,7 @@ router.post(
     WalletController.sendMoney
 );
 
+// Agent
 router.post(
     '/cash-in',
     checkAuth(Role.AGENT),
