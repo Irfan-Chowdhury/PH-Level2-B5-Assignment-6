@@ -135,6 +135,8 @@ root/
 
 * 🔗 **GitHub Repository**: [Link Here](https://github.com/Irfan-Chowdhury/PH-Level2-B5-Assignment-5)
 * 🌐 **Live API Deployment**: [https://digital-wallet-api-blush.vercel.app](https://digital-wallet-api-blush.vercel.app/)
+* 🔗 **POSTMAN Collection**: [https://drive.google.com/file/d/10SgLgpq7p6xbph76rJvYNSrSBylHKrA9/view?usp=sharing](https://drive.google.com/file/d/10SgLgpq7p6xbph76rJvYNSrSBylHKrA9/view?usp=sharing)
+* 🔗 **Video Link**: [https://drive.google.com/file/d/13neXmU2YOuglLU3Zr-jcvJ3QXHYuXNBj/view?usp=sharing](https://drive.google.com/file/d/13neXmU2YOuglLU3Zr-jcvJ3QXHYuXNBj/view?usp=sharing)
 
 ---
 

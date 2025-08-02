@@ -40,7 +40,7 @@ const addMoney = (req, userId) => __awaiter(void 0, void 0, void 0, function* ()
         to: new mongoose_1.Types.ObjectId(userId),
         type: 'add-money',
         amount,
-        status: 'success',
+        status: 'completed',
     });
     return { wallet, transaction };
 });
@@ -59,7 +59,7 @@ const withdrawMoney = (req, userId) => __awaiter(void 0, void 0, void 0, functio
         to: 'external-source',
         type: 'withdraw-money',
         amount,
-        status: 'success',
+        status: 'completed',
     });
     const withdrawInfo = {
         user: userId,
@@ -100,7 +100,7 @@ const sendMoney = (req, userId) => __awaiter(void 0, void 0, void 0, function* (
             to: receiverUser._id,
             type: 'send-money',
             amount,
-            status: 'success',
+            status: 'completed',
         });
         const sendMoneyInfo = {
             senderWallet: senderWallet._id,
@@ -145,7 +145,7 @@ const cashIn = (req, agentId) => __awaiter(void 0, void 0, void 0, function* () 
         to: receiverUser._id,
         type: 'cash-in',
         amount,
-        status: 'success',
+        status: 'completed',
     });
     const cashInInfo = {
         agentWallet: agentWallet._id,
@@ -201,7 +201,7 @@ const cashOut = (req, userId) => __awaiter(void 0, void 0, void 0, function* () 
             to: agentId,
             type: 'cash-out',
             amount,
-            status: 'success',
+            status: 'completed',
         });
         const cashOutInfo = {
             agentWallet: userWallet._id,
