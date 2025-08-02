@@ -11,7 +11,7 @@ const user_interface_1 = require("../user/user.interface");
 const validateRequest_1 = require("../../middlewares/validateRequest");
 const wallet_validation_1 = require("./wallet.validation");
 const router = express_1.default.Router();
-router.get('/my-wallet', (0, checkAuth_1.checkAuth)(user_interface_1.Role.ADMIN, user_interface_1.Role.SUPER_ADMIN), wallet_controller_1.WalletController.getMyWallet); // done by admin
+router.get('/my-wallet', (0, checkAuth_1.checkAuth)(user_interface_1.Role.AGENT, user_interface_1.Role.USER), wallet_controller_1.WalletController.getMyWallet);
 // Users should be able to : Add money (top-up)
 router.post('/add-money', (0, checkAuth_1.checkAuth)(user_interface_1.Role.USER), (0, validateRequest_1.validateRequest)(wallet_validation_1.WalletValidation.addMoneyZodSchema), wallet_controller_1.WalletController.addMoney);
 // Users should be able to : withdraw money 
