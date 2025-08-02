@@ -8,7 +8,10 @@ const createTransaction = async (data: ITransaction): Promise<ITransaction> => {
 
 const getMyTransactions = async (userId: string) => {
   const transactions = await Transaction.find({
-    $or: [{ from: userId }, { to: userId }],
+    $or: [
+      { from: userId, to: { $ne: userId } },
+      { to: userId, from: { $ne: userId } }
+    ]
   }).sort({ createdAt: -1 });
 
   return transactions;
