@@ -50,7 +50,7 @@ router.post(
 router.post(
     '/cash-out',
     checkAuth(Role.AGENT),
-    validateRequest(WalletValidation.cashOutZodSchema),
+    // validateRequest(WalletValidation.cashOutZodSchema),
     WalletController.cashOut
 );
 

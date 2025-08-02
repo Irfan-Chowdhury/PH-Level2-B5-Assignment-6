@@ -3,7 +3,7 @@ import httpStatus from "http-status-codes";
 // import AppError from '../../../errors/AppError';
 import { Wallet } from './wallet.model';
 import { User } from '../user/user.model'; // যদি ইউজার চেক লাগে
-import { ICashInInfo, ISendMoneyInfo, IWallet, IWithdrawInfo } from './wallet.interface';
+import { ICashInInfo, ICashOutInfo, ISendMoneyInfo, IWallet, IWithdrawInfo } from './wallet.interface';
 // import { Transaction } from '../transaction/transaction.model';
 import mongoose, { Types } from 'mongoose';
 import AppError from '../../errorHelpers/AppError';
@@ -175,8 +175,8 @@ const cashIn = async (req: Request, agentId: string): Promise<{cashInInfo : ICas
     const cashInInfo: ICashInInfo = {
         agentWallet: agentWallet._id,
         transaction: transaction._id,
-        agent: agentId,
-        receiver: receiverUser._id,
+        sender_agent: agentId,
+        receiver_user: receiverUser._id,
         type: 'cash-in',
         sendAmount: amount,
         remainingBalance: agentWallet.balance,
@@ -188,26 +188,84 @@ const cashIn = async (req: Request, agentId: string): Promise<{cashInInfo : ICas
 };
 
 
-const cashOut = async (req: Request, userId: string): Promise<IWallet> => {
-    const { amount } = req.body;
+// const cashOut = async (req: Request, userId: string): Promise<IWallet> => {
+//     const { amount } = req.body;
 
-    const wallet = await Wallet.findOne({ user: userId });
-    if (!wallet || wallet.balance < amount) {
-        throw new AppError(httpStatus.BAD_REQUEST, 'Insufficient balance');
+//     const wallet = await Wallet.findOne({ user: userId });
+//     if (!wallet || wallet.balance < amount) {
+//         throw new AppError(httpStatus.BAD_REQUEST, 'Insufficient balance');
+//     }
+
+//     wallet.balance -= amount;
+//     await wallet.save();
+
+//     await Transaction.create({
+//         user: userId,
+//         type: 'cash_out',
+//         amount,
+//         status: 'completed',
+//     });
+
+//     return wallet;
+// };
+
+
+const cashOut = async (req: Request, userId: string): Promise<{cashOutInfo : ICashOutInfo}> => {
+    const { amount, userPhone } = req.body;
+    const agentId = userId;
+
+    try {
+
+        const user = await User.findOne({ phone: userPhone });
+        if (!user) {
+            throw new AppError(httpStatus.NOT_FOUND, 'Receiver not found');
+        }
+
+        const userWallet = await Wallet.findOne({ user: user._id });
+        if (!userWallet || userWallet.balance < amount) {
+            throw new AppError(httpStatus.BAD_REQUEST, 'Insufficient balance');
+        }
+
+        const agentWallet = await Wallet.findOne({ user: agentId });
+        if (!agentWallet) {
+            throw new AppError(httpStatus.NOT_FOUND, 'Agent wallet not found');
+        }
+
+        userWallet.balance -= amount;
+        await userWallet.save();
+
+        agentWallet.balance += amount;
+        await agentWallet.save();
+
+        let transaction = await Transaction.create({
+            user: agentId,
+            from:user._id,
+            to: agentId,
+            type: 'cash-out',
+            amount,
+            status: 'success',
+        });
+
+        const cashOutInfo: ICashOutInfo = {
+            agentWallet: userWallet._id,
+            transaction: transaction._id,
+            sender_user: user._id,
+            receiver_agent: agentId,
+            type: 'cash-out',
+            sendAmount: amount,
+            remainingBalance: agentWallet.balance,
+            timestamp: transaction.timestamp,
+          };
+    
+        return { cashOutInfo };
+
+    } catch (error) {
+        throw error;
     }
-
-    wallet.balance -= amount;
-    await wallet.save();
-
-    await Transaction.create({
-        user: userId,
-        type: 'cash_out',
-        amount,
-        status: 'completed',
-    });
-
-    return wallet;
 };
+
+
+
 
 const getMyWallet = async (req: Request, userId: string): Promise<IWallet | null> => {
     const wallet = await Wallet.findOne({ user: userId });

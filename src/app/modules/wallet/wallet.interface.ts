@@ -38,9 +38,20 @@ export interface ISendMoneyInfo {
 export interface ICashInInfo {
   agentWallet: string | Types.ObjectId;
   transaction: string | Types.ObjectId;
-  agent: string | Types.ObjectId;    // ✅ allow ObjectId
-  receiver: string | Types.ObjectId;
+  sender_agent: string | Types.ObjectId;    // ✅ allow ObjectId
+  receiver_user: string | Types.ObjectId;
   type: 'cash-in';
+  sendAmount: number;
+  remainingBalance: number;
+  timestamp?: Date;
+}
+
+export interface ICashOutInfo {
+  agentWallet: string | Types.ObjectId;
+  transaction: string | Types.ObjectId;
+  sender_user: string | Types.ObjectId;    // ✅ allow ObjectId
+  receiver_agent: string | Types.ObjectId;
+  type: 'cash-out';
   sendAmount: number;
   remainingBalance: number;
   timestamp?: Date;
