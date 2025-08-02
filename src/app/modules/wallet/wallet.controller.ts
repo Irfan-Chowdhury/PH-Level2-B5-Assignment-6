@@ -11,8 +11,6 @@ const addMoney = catchAsync(async (req: Request, res) => {
     const decodeToken = req.user as JwtPayload;
     const result = await WalletService.addMoney(req, decodeToken.userId);
     
-    // return;
-
     sendResponse(res, {
         statusCode: 200,
         success: true,
@@ -24,6 +22,7 @@ const addMoney = catchAsync(async (req: Request, res) => {
 const withdrawMoney = catchAsync(async (req: Request, res) => {
     const decodeToken = req.user as JwtPayload;
     const result = await WalletService.withdrawMoney(req, decodeToken.userId);
+
     sendResponse(res, {
         statusCode: 200,
         success: true,

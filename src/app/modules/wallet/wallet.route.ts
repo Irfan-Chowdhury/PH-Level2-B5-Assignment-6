@@ -16,18 +16,23 @@ router.get('/my-wallet',
     WalletController.getMyWallet);  // done by admin
 
 
+// Users should be able to : Add money (top-up)
 router.post(
     '/add-money',
     checkAuth(Role.USER),
-    // validateRequest(WalletValidation.addMoneyZodSchema),
+    validateRequest(WalletValidation.addMoneyZodSchema),
     WalletController.addMoney
 );
+
+// Users should be able to : withdraw money 
 router.post(
     '/withdraw-money',
     checkAuth(Role.USER),
     validateRequest(WalletValidation.withdrawMoneyZodSchema),
     WalletController.withdrawMoney
 );
+
+// Users should be able to : send money (top-up)
 router.post(
     '/send-money',
     checkAuth(Role.USER),

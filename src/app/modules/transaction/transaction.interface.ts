@@ -1,6 +1,7 @@
 import { Types } from "mongoose";
 
 export interface ITransaction {
+  // _id?: Types.ObjectId;
   user: Types.ObjectId;
   from?: string;  
   to?: string;    

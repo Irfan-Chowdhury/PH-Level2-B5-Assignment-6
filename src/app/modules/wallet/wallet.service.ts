@@ -3,7 +3,7 @@ import httpStatus from "http-status-codes";
 // import AppError from '../../../errors/AppError';
 import { Wallet } from './wallet.model';
 import { User } from '../user/user.model'; // যদি ইউজার চেক লাগে
-import { IWallet } from './wallet.interface';
+import { IWallet, IWithdrawInfo } from './wallet.interface';
 // import { Transaction } from '../transaction/transaction.model';
 import mongoose, { Types } from 'mongoose';
 import AppError from '../../errorHelpers/AppError';
@@ -26,10 +26,8 @@ const addMoney = async (req: Request, userId: string): Promise<{ wallet: IWallet
 
     wallet.balance += amount;
     await wallet.save();
-
-    let transaction;
     
-    transaction = await Transaction.create({
+    let transaction = await Transaction.create({
         user: new Types.ObjectId(userId),
         from:'external-source',  
         to: new Types.ObjectId(userId), 
@@ -41,7 +39,8 @@ const addMoney = async (req: Request, userId: string): Promise<{ wallet: IWallet
     return { wallet, transaction };
 };
 
-const withdrawMoney = async (req: Request, userId: string): Promise<IWallet> => {
+// const withdrawMoney = async (req: Request, userId: string): Promise<{ wallet: IWallet; transaction: ITransaction }> => {
+const withdrawMoney = async (req: Request, userId: string): Promise<{ withdrawInfo: IWithdrawInfo }> => {
     const { amount } = req.body;
 
     const wallet = await Wallet.findOne({ user: userId });
@@ -52,7 +51,7 @@ const withdrawMoney = async (req: Request, userId: string): Promise<IWallet> => 
     wallet.balance -= amount;
     await wallet.save();
 
-    await Transaction.create({
+    let transaction =  await Transaction.create({
         user: userId,
         from:userId,  
         to: 'external-source', 
@@ -61,8 +60,22 @@ const withdrawMoney = async (req: Request, userId: string): Promise<IWallet> => 
         status: 'success',
     });
 
-    return wallet;
+    
+    const withdrawInfo: IWithdrawInfo = {
+        user: userId,
+        wallet: wallet._id,
+        transaction: transaction.id,
+        type: 'withdraw-money',
+        withdrawAmount: transaction.amount,
+        RemainingBalance: wallet.balance,
+        from: userId,
+        to: 'external-source',
+        timestamp: transaction.timestamp,
+      };
+
+    return { withdrawInfo };
 };
+
 
 const sendMoney = async (req: Request, userId: string): Promise<IWallet> => {
     const { amount, receiverPhone } = req.body;
