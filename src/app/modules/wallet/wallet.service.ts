@@ -3,7 +3,7 @@ import httpStatus from "http-status-codes";
 // import AppError from '../../../errors/AppError';
 import { Wallet } from './wallet.model';
 import { User } from '../user/user.model'; // যদি ইউজার চেক লাগে
-import { IWallet, IWithdrawInfo } from './wallet.interface';
+import { ISendMoneyInfo, IWallet, IWithdrawInfo } from './wallet.interface';
 // import { Transaction } from '../transaction/transaction.model';
 import mongoose, { Types } from 'mongoose';
 import AppError from '../../errorHelpers/AppError';
@@ -60,7 +60,7 @@ const withdrawMoney = async (req: Request, userId: string): Promise<{ withdrawIn
         status: 'success',
     });
 
-    
+
     const withdrawInfo: IWithdrawInfo = {
         user: userId,
         wallet: wallet._id,
@@ -77,15 +77,14 @@ const withdrawMoney = async (req: Request, userId: string): Promise<{ withdrawIn
 };
 
 
-const sendMoney = async (req: Request, userId: string): Promise<IWallet> => {
+
+const sendMoney = async (req: Request, userId: string): Promise<{sendMoneyInfo : ISendMoneyInfo}> => {
     const { amount, receiverPhone } = req.body;
     const senderId = userId;
 
-    const session = await mongoose.startSession();
-    session.startTransaction();
-
     try {
-        const senderWallet = await Wallet.findOne({ user: senderId }).session(session);
+        const senderWallet = await Wallet.findOne({ user: senderId });
+
         if (!senderWallet || senderWallet.balance < amount) {
             throw new AppError(httpStatus.BAD_REQUEST, 'Insufficient balance');
         }
@@ -95,7 +94,7 @@ const sendMoney = async (req: Request, userId: string): Promise<IWallet> => {
             throw new AppError(httpStatus.NOT_FOUND, 'Receiver not found');
         }
 
-        const receiverWallet = await Wallet.findOne({ user: receiverUser._id }).session(session);
+        const receiverWallet = await Wallet.findOne({ user: receiverUser._id });
         if (!receiverWallet) {
             throw new AppError(httpStatus.NOT_FOUND, 'Receiver wallet not found');
         }
@@ -103,47 +102,36 @@ const sendMoney = async (req: Request, userId: string): Promise<IWallet> => {
         senderWallet.balance -= amount;
         receiverWallet.balance += amount;
 
-        await senderWallet.save({ session });
-        await receiverWallet.save({ session });
+        await senderWallet.save();
+        await receiverWallet.save();
 
-        await Transaction.create(
-                {
-                    user: userId,
-                    from:senderId,
-                    to: receiverUser._id, 
-                    type: 'send-money',
-                    amount,
-                    status: 'success',
-                },
-                // {
-                //     user: receiverUser._id,
-                //     type: 'receive-money',
-                //     amount,
-                //     status: 'success',
-                // },
-            
-            { session }
-        );
+        let transaction = await Transaction.create({
+            user: userId,
+            from:senderId,
+            to: receiverUser._id, 
+            type: 'send-money',
+            amount,
+            status: 'success',
+        });
 
-        // await Transaction.create({
-        //     user: userId,
-        //     from:senderId,
-        //     to: receiverUser._id, 
-        //     type: 'send-money',
-        //     amount,
-        //     status: 'success',
-        // });
+        const sendMoneyInfo: ISendMoneyInfo = {
+            senderWallet: senderWallet._id,
+            transaction: transaction._id,
+            sender: senderId,
+            receiver: receiverUser._id,
+            type: 'send-money',
+            sendAmount: amount,
+            remainingBalance: senderWallet.balance,
+            timestamp: transaction.timestamp,
+          };
+    
+        return { sendMoneyInfo };
 
-        await session.commitTransaction();
-        session.endSession();
-
-        return senderWallet;
     } catch (error) {
-        await session.abortTransaction();
-        session.endSession();
         throw error;
     }
 };
+
 
 const cashIn = async (req: Request, userId: string): Promise<IWallet> => {
     const { amount } = req.body;

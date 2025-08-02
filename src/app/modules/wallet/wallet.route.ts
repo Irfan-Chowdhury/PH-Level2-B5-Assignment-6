@@ -32,13 +32,14 @@ router.post(
     WalletController.withdrawMoney
 );
 
-// Users should be able to : send money (top-up)
+// Users should be able to : Send money to another user
 router.post(
     '/send-money',
     checkAuth(Role.USER),
     // validateRequest(WalletValidation.sendMoneyZodSchema),
     WalletController.sendMoney
 );
+
 router.post(
     '/cash-in',
     checkAuth(Role.AGENT),

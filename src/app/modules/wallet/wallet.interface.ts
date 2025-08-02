@@ -23,3 +23,14 @@ export interface IWithdrawInfo {
   to: string;
   timestamp?: Date;
 }
+
+export interface ISendMoneyInfo {
+  senderWallet: string | Types.ObjectId;
+  transaction: string | Types.ObjectId;
+  sender: string | Types.ObjectId;    // ✅ allow ObjectId
+  receiver: string | Types.ObjectId;
+  type: 'send-money';
+  sendAmount: number;
+  remainingBalance: number;
+  timestamp?: Date;
+}
