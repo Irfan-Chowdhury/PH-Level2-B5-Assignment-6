@@ -1,6 +1,6 @@
 import { envVars } from "../../config/env";
 import AppError from "../../errorHelpers/AppError";
-import { IAuthProvider, IUser, Role } from "./user.interface";
+import { IAuthProvider, IsActive, IUser, Role } from "./user.interface";
 import { User } from "./user.model";
 import httpStatus from "http-status-codes";
 import bcryptjs from "bcryptjs";
@@ -8,11 +8,11 @@ import { JwtPayload } from "jsonwebtoken";
 import { Wallet } from "../wallet/wallet.model";
 
 
-const createUser =  async (payload: Partial<IUser>) => {
+const createUser = async (payload: Partial<IUser>) => {
 
-    const {email, password, role, ...rest} = payload;
+    const { email, password, role, ...rest } = payload;
 
-    const isUserExist = await User.findOne({email});
+    const isUserExist = await User.findOne({ email });
 
     if (isUserExist) {
         throw new AppError(httpStatus.BAD_REQUEST, "User Already Exists");
@@ -20,7 +20,7 @@ const createUser =  async (payload: Partial<IUser>) => {
 
     const hashedPassword = await bcryptjs.hash(password as string, Number(envVars.BCRYPT_SALT_ROUND))
 
-    const authProvider: IAuthProvider = {provider: "credentials", providerId: email as string}
+    const authProvider: IAuthProvider = { provider: "credentials", providerId: email as string }
 
     const user = await User.create({
         role,
@@ -30,7 +30,7 @@ const createUser =  async (payload: Partial<IUser>) => {
         ...rest
     })
 
-    if (user.role=== Role.USER || user.role=== Role.AGENT ) {
+    if (user.role === Role.USER || user.role === Role.AGENT) {
         await Wallet.create({
             user: user._id,
             balance: 50,
@@ -88,27 +88,41 @@ const updateUser = async (userId: string, payload: Partial<IUser>, decodedToken:
 const getAllUsers = async () => {
     const users = await User.find({ role: 'USER' }); // 🔍 filter here
     const totalUsers = await User.countDocuments({ role: 'USER' }); // 🔍 same filter
-  
+
     return {
-      data: users,
-      meta: {
-        total: totalUsers,
-      },
+        data: users,
+        meta: {
+            total: totalUsers,
+        },
     };
-  };
+};
+
 
 const getAllAgents = async () => {
     const agents = await User.find({ role: 'AGENT' }); // 🔍 filter here
     const totalUsers = await User.countDocuments({ role: 'USER' }); // 🔍 same filter
-  
+
     return {
-      data: agents,
-      meta: {
-        total: totalUsers,
-      },
+        data: agents,
+        meta: {
+            total: totalUsers,
+        },
     };
-  };
-  
+};
+
+
+const updateAgentStatus = async (
+    agentId: string,
+    isActive: 'ACTIVE' | 'INACTIVE'
+): Promise<IUser> => {
+    const agent = await User.findOneAndUpdate(
+        { _id: agentId, role: 'AGENT' },
+        { isActive:isActive },
+        { new: true }
+    );
+    if (!agent) throw new AppError(httpStatus.NOT_FOUND, 'Agent not found');
+    return agent;
+};
 
 
 
@@ -117,4 +131,5 @@ export const UserService = {
     updateUser,
     getAllUsers,
     getAllAgents,
+    updateAgentStatus
 }

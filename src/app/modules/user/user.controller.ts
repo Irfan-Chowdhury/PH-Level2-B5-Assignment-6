@@ -69,14 +69,37 @@ const getAllAgents = catchAsync(async (req: Request, res: Response, next: NextFu
 });
 
 
+const approveAgent = catchAsync(async (req: Request, res) => {
+    const { agentId } = req.params;
+    const result = await UserService.updateAgentStatus(agentId, 'ACTIVE');
+    sendResponse(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: 'Agent approved successfully',
+      data: result,
+    });
+  });
+  
+  const suspendAgent = catchAsync(async (req: Request, res) => {
+    const { agentId } = req.params;
+    const result = await UserService.updateAgentStatus(agentId, 'INACTIVE');
+    sendResponse(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: 'Agent suspended successfully',
+      data: result,
+    });
+  });
 
-
+  
 
 export const UserController = {
     createUser,
     updateUser,
     getAllUsers,
-    getAllAgents
+    getAllAgents,
+    approveAgent,
+    suspendAgent,
 }
 
 
