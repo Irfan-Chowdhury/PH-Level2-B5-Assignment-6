@@ -9,7 +9,7 @@ const transactionSchema = new Schema<ITransaction>(
     amount: { type: Number, required: true },
     type: {
       type: String,
-      enum: ['add-money', 'withdraw-money', 'send-money', "receive-money"],
+      enum: ['add-money', 'withdraw-money', 'send-money', "receive-money", "cash-in", "cash-out"],
       required: true,
     },
     status: {

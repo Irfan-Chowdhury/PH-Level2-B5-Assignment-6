@@ -3,7 +3,7 @@ import httpStatus from "http-status-codes";
 // import AppError from '../../../errors/AppError';
 import { Wallet } from './wallet.model';
 import { User } from '../user/user.model'; // যদি ইউজার চেক লাগে
-import { ISendMoneyInfo, IWallet, IWithdrawInfo } from './wallet.interface';
+import { ICashInInfo, ISendMoneyInfo, IWallet, IWithdrawInfo } from './wallet.interface';
 // import { Transaction } from '../transaction/transaction.model';
 import mongoose, { Types } from 'mongoose';
 import AppError from '../../errorHelpers/AppError';
@@ -133,26 +133,60 @@ const sendMoney = async (req: Request, userId: string): Promise<{sendMoneyInfo :
 };
 
 
-const cashIn = async (req: Request, userId: string): Promise<IWallet> => {
-    const { amount } = req.body;
 
-    const wallet = await Wallet.findOne({ user: userId });
-    if (!wallet) {
+const cashIn = async (req: Request, agentId: string): Promise<{cashInInfo : ICashInInfo}> => {
+    const { amount, receiverPhone } = req.body;
+
+    const agentWallet = await Wallet.findOne({ user: agentId });
+    if (!agentWallet) {
         throw new AppError(httpStatus.NOT_FOUND, 'Wallet not found');
+    } 
+
+    const receiverUser = await User.findOne({ phone: receiverPhone });
+    if (!receiverUser) {
+        throw new AppError(httpStatus.NOT_FOUND, 'Receiver not found');
+    }
+    const receiverWallet = await Wallet.findOne({ user: receiverUser._id });
+    if (!receiverWallet) {
+        throw new AppError(httpStatus.NOT_FOUND, 'Receiver wallet not found');
     }
 
-    wallet.balance += amount;
-    await wallet.save();
+    if (!agentWallet || agentWallet.balance < amount) {
+        throw new AppError(httpStatus.BAD_REQUEST, 'Insufficient balance');
+    }
 
-    await Transaction.create({
-        user: userId,
-        type: 'cash_in',
+
+    agentWallet.balance -= amount;
+    await agentWallet.save();
+
+    receiverWallet.balance += amount;
+    await receiverWallet.save();
+
+    let transaction = await Transaction.create({
+        user: agentId,
+        from: agentId,
+        to: receiverUser._id, 
+        type: 'cash-in',
         amount,
-        status: 'completed',
+        status: 'success',
     });
 
-    return wallet;
+
+    const cashInInfo: ICashInInfo = {
+        agentWallet: agentWallet._id,
+        transaction: transaction._id,
+        agent: agentId,
+        receiver: receiverUser._id,
+        type: 'cash-in',
+        sendAmount: amount,
+        remainingBalance: agentWallet.balance,
+        timestamp: transaction.timestamp,
+    };
+
+
+    return { cashInInfo };
 };
+
 
 const cashOut = async (req: Request, userId: string): Promise<IWallet> => {
     const { amount } = req.body;

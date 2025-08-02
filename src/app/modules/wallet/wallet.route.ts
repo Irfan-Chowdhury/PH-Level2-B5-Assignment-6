@@ -44,7 +44,7 @@ router.post(
 router.post(
     '/cash-in',
     checkAuth(Role.AGENT),
-    validateRequest(WalletValidation.cashInZodSchema),
+    // validateRequest(WalletValidation.cashInZodSchema),
     WalletController.cashIn
 );
 router.post(
