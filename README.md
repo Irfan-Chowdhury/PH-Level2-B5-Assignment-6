@@ -82,16 +82,6 @@ npm run dev
 
 <br>
 
-## 🧠 Business Logic Highlights
-
-* ✅ Validates available copies before borrowing
-* 🧠 Automatically deducts borrowed quantity from stock
-* 🚫 Marks book unavailable when copies reach 0
-* 🔎 Aggregates borrow data to show summary
-* 🧼 Global error handler with custom response format
-
----
-
 ---
 
 ## 📁 Folder Structure
