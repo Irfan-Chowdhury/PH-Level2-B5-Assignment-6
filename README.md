@@ -4,9 +4,6 @@
 
 </div>
 
-A robust RESTful API for managing books and borrowings in a library, built with **Express**, **TypeScript**, and **MongoDB (Mongoose)**. It includes advanced features such as aggregation pipelines, schema validation, filtering, sorting, and more.
-
----
 
 ## 📘 Project Overview
 
