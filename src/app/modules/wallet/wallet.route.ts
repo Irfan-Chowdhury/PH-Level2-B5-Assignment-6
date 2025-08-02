@@ -4,10 +4,6 @@ import { checkAuth } from '../../middlewares/checkAuth';
 import { Role } from '../user/user.interface';
 import { validateRequest } from '../../middlewares/validateRequest';
 import { WalletValidation } from './wallet.validation';
-// import { auth } from '../../middlewares/auth';
-// import { USER_ROLE } from '../../../enums/user';
-// import validateRequest from '../../middlewares/validateRequest';
-// import { WalletValidation } from './wallet.validation';
 
 const router = express.Router();
 
@@ -52,6 +48,12 @@ router.post(
     checkAuth(Role.AGENT),
     // validateRequest(WalletValidation.cashOutZodSchema),
     WalletController.cashOut
+);
+
+router.get(
+    '/all',
+    checkAuth(Role.ADMIN),
+    WalletController.getAllWallet
 );
 
 export const WalletRoutes = router;

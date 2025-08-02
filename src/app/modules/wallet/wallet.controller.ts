@@ -75,6 +75,16 @@ const getMyWallet = catchAsync(async (req: Request, res) => {
     });
 });
 
+const getAllWallet = catchAsync(async (req: Request, res) => {
+    const result = await WalletService.getAllWallets();
+    sendResponse(res, {
+        statusCode: 200,
+        success: true,
+        message: 'Wallet fetched successfully',
+        data: result,
+    });
+});
+
 export const WalletController = {
     addMoney,
     withdrawMoney,
@@ -82,4 +92,5 @@ export const WalletController = {
     cashIn,
     cashOut,
     getMyWallet,
+    getAllWallet
 };

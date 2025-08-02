@@ -272,6 +272,19 @@ const getMyWallet = async (req: Request, userId: string): Promise<IWallet | null
     return wallet;
 };
 
+
+const getAllWallets = async () => {
+    const wallets = await Wallet.find({});
+    const totalwallets = await Wallet.countDocuments();
+
+    return {
+        data: wallets,
+        meta: {
+            total: totalwallets
+        }
+    };
+}
+
 export const WalletService = {
     addMoney,
     withdrawMoney,
@@ -279,4 +292,5 @@ export const WalletService = {
     cashIn,
     cashOut,
     getMyWallet,
+    getAllWallets
 };
