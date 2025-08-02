@@ -33,7 +33,7 @@ const addMoney = async (req: Request, userId: string): Promise<{ wallet: IWallet
         to: new Types.ObjectId(userId), 
         type: 'add-money',
         amount,
-        status: 'success',
+        status: 'completed',
     });
 
     return { wallet, transaction };
@@ -57,7 +57,7 @@ const withdrawMoney = async (req: Request, userId: string): Promise<{ withdrawIn
         to: 'external-source', 
         type: 'withdraw-money',
         amount,
-        status: 'success',
+        status: 'completed',
     });
 
 
@@ -111,7 +111,7 @@ const sendMoney = async (req: Request, userId: string): Promise<{sendMoneyInfo :
             to: receiverUser._id, 
             type: 'send-money',
             amount,
-            status: 'success',
+            status: 'completed',
         });
 
         const sendMoneyInfo: ISendMoneyInfo = {
@@ -168,7 +168,7 @@ const cashIn = async (req: Request, agentId: string): Promise<{cashInInfo : ICas
         to: receiverUser._id, 
         type: 'cash-in',
         amount,
-        status: 'success',
+        status: 'completed',
     });
 
 
@@ -243,7 +243,7 @@ const cashOut = async (req: Request, userId: string): Promise<{cashOutInfo : ICa
             to: agentId,
             type: 'cash-out',
             amount,
-            status: 'success',
+            status: 'completed',
         });
 
         const cashOutInfo: ICashOutInfo = {
