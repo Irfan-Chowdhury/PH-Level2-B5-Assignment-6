@@ -7,6 +7,7 @@ export interface ITransaction {
   to?: string;    
   amount: number;
   type: 'add-money' | 'withdraw-money' | 'send-money' | 'receive-money' | 'cash-in' | 'cash-out';
-  status: 'success' | 'failed';
+  // status: 'success' | 'failed';
+  status: 'pending' | 'completed' | 'reversed' ;
   timestamp?: Date;
 }
