@@ -5,19 +5,19 @@ import { Wallet } from './wallet.model';
 import { User } from '../user/user.model'; // যদি ইউজার চেক লাগে
 import { IWallet } from './wallet.interface';
 // import { Transaction } from '../transaction/transaction.model';
-import mongoose from 'mongoose';
+import mongoose, { Types } from 'mongoose';
 import AppError from '../../errorHelpers/AppError';
 import { Transaction } from '../transaction/transaction.model';
+import { ITransaction } from '../transaction/transaction.interface';
 
-const addMoney = async (req: Request, userId: string): Promise<IWallet> => {
+const addMoney = async (req: Request, userId: string): Promise<{ wallet: IWallet; transaction: ITransaction }> => {
     const { amount } = req.body;
 
     let wallet = await Wallet.findOne({ user: userId });
+
     if (!wallet) {
         wallet = await Wallet.create({
             user: userId,
-            // from:'external-source',  
-            // to: userId, 
             balance: 50,
             isBlocked: false,
         });
@@ -27,16 +27,18 @@ const addMoney = async (req: Request, userId: string): Promise<IWallet> => {
     wallet.balance += amount;
     await wallet.save();
 
-    await Transaction.create({
-        user: userId,
+    let transaction;
+    
+    transaction = await Transaction.create({
+        user: new Types.ObjectId(userId),
         from:'external-source',  
-        to: userId, 
+        to: new Types.ObjectId(userId), 
         type: 'add-money',
         amount,
         status: 'success',
     });
 
-    return wallet;
+    return { wallet, transaction };
 };
 
 const withdrawMoney = async (req: Request, userId: string): Promise<IWallet> => {

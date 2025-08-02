@@ -13,13 +13,13 @@ const router = express.Router();
 
 router.get('/my-wallet', 
     checkAuth(Role.ADMIN, Role.SUPER_ADMIN),
-    WalletController.getMyWallet);
+    WalletController.getMyWallet);  // done by admin
 
 
 router.post(
     '/add-money',
     checkAuth(Role.USER),
-    validateRequest(WalletValidation.addMoneyZodSchema),
+    // validateRequest(WalletValidation.addMoneyZodSchema),
     WalletController.addMoney
 );
 router.post(

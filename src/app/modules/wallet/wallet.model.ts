@@ -4,7 +4,7 @@ import { IWallet } from './wallet.interface';
 
 const walletSchema = new Schema<IWallet>(
   {
-    user: { type: Schema.Types.ObjectId, ref: 'User', required: true, unique: true },
+    user: { type: Schema.Types.ObjectId, ref: 'User', required: true, unique: false },
     // from: { type: Schema.Types.Mixed, required: false },
     // to: { type: Schema.Types.Mixed, required: false },
     balance: { type: Number, required: true, default: 50 },

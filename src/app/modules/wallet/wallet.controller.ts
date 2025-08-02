@@ -8,8 +8,11 @@ import { sendResponse } from '../../utils/sendResponse';
 import { JwtPayload } from 'jsonwebtoken';
 
 const addMoney = catchAsync(async (req: Request, res) => {
-    const decodeToken = req.user as JwtPayload
+    const decodeToken = req.user as JwtPayload;
     const result = await WalletService.addMoney(req, decodeToken.userId);
+    
+    // return;
+
     sendResponse(res, {
         statusCode: 200,
         success: true,
