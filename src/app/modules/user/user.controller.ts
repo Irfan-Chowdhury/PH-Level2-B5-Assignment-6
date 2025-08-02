@@ -56,6 +56,18 @@ const getAllUsers = catchAsync(async (req: Request, res: Response, next: NextFun
     });
 });
 
+const getAllAgents = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+    const result = await UserService.getAllAgents();
+
+    sendResponse(res, {
+        success : true,
+        statusCode: httpStatus.OK,
+        message: "All users retrieve Successfully",
+        data: result.data,
+        meta: result.meta,
+    });
+});
+
 
 
 
@@ -63,7 +75,8 @@ const getAllUsers = catchAsync(async (req: Request, res: Response, next: NextFun
 export const UserController = {
     createUser,
     updateUser,
-    getAllUsers
+    getAllUsers,
+    getAllAgents
 }
 
 

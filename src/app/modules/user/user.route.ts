@@ -12,9 +12,21 @@ router.post("/register",
     validateRequest(createUserZodSchema), 
     UserController.createUser);
 
-router.get("/all-users", checkAuth(Role.ADMIN, Role.SUPER_ADMIN), UserController.getAllUsers);
 
 router.patch("/:id", validateRequest(updateUserZodSchema), checkAuth(...Object.values(Role)), UserController.updateUser)
 // /api/v1/user/:id
+
+
+router.get("/all-users", 
+    checkAuth(Role.ADMIN, Role.SUPER_ADMIN), 
+    UserController.getAllUsers
+);
+router.get("/all-agents", 
+    checkAuth(Role.ADMIN, Role.SUPER_ADMIN), 
+    UserController.getAllAgents
+);
+
+
+
 
 export const UserRoutes = router;

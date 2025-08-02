@@ -86,21 +86,35 @@ const updateUser = async (userId: string, payload: Partial<IUser>, decodedToken:
 
 
 const getAllUsers = async () => {
-    const users = await User.find({});
-    const totalUsers = await User.countDocuments();
-
+    const users = await User.find({ role: 'USER' }); // 🔍 filter here
+    const totalUsers = await User.countDocuments({ role: 'USER' }); // 🔍 same filter
+  
     return {
-        data: users,
-        meta: {
-            total: totalUsers
-        }
+      data: users,
+      meta: {
+        total: totalUsers,
+      },
     };
-};
+  };
+
+const getAllAgents = async () => {
+    const agents = await User.find({ role: 'AGENT' }); // 🔍 filter here
+    const totalUsers = await User.countDocuments({ role: 'USER' }); // 🔍 same filter
+  
+    return {
+      data: agents,
+      meta: {
+        total: totalUsers,
+      },
+    };
+  };
+  
 
 
 
 export const UserService = {
     createUser,
     updateUser,
-    getAllUsers
+    getAllUsers,
+    getAllAgents,
 }
