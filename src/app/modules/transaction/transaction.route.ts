@@ -9,7 +9,7 @@ const router = express.Router();
 // Users should be able to : View transaction history
 router.get(
     '/my-transactions',
-    checkAuth(Role.USER),
+    checkAuth(Role.USER, Role.AGENT),
     getMyTransactions
 );
 

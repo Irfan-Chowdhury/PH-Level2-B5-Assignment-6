@@ -30,17 +30,24 @@ const user_interface_1 = require("./user.interface");
 const user_model_1 = require("./user.model");
 const http_status_codes_1 = __importDefault(require("http-status-codes"));
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
+const wallet_model_1 = require("../wallet/wallet.model");
 const createUser = (payload) => __awaiter(void 0, void 0, void 0, function* () {
-    const { email, password } = payload, rest = __rest(payload, ["email", "password"]);
+    const { email, password, role } = payload, rest = __rest(payload, ["email", "password", "role"]);
     const isUserExist = yield user_model_1.User.findOne({ email });
     if (isUserExist) {
         throw new AppError_1.default(http_status_codes_1.default.BAD_REQUEST, "User Already Exists");
     }
-    // const hashedPassword = await bcryptjs.hash(password as string, 10);
     const hashedPassword = yield bcryptjs_1.default.hash(password, Number(env_1.envVars.BCRYPT_SALT_ROUND));
     const authProvider = { provider: "credentials", providerId: email };
-    const user = yield user_model_1.User.create(Object.assign({ email, password: hashedPassword, auths: [authProvider] }, rest));
-    // const user = await User.create(payload);
+    const user = yield user_model_1.User.create(Object.assign({ role,
+        email, password: hashedPassword, auths: [authProvider] }, rest));
+    if (user.role === user_interface_1.Role.USER || user.role === user_interface_1.Role.AGENT) {
+        yield wallet_model_1.Wallet.create({
+            user: user._id,
+            balance: 50,
+            isBlocked: false,
+        });
+    }
     return user;
 });
 const updateUser = (userId, payload, decodedToken) => __awaiter(void 0, void 0, void 0, function* () {
@@ -57,7 +64,7 @@ const updateUser = (userId, payload, decodedToken) => __awaiter(void 0, void 0, 
      * promoting to superadmin - superadmin
      */
     if (payload.role) {
-        if (decodedToken.role === user_interface_1.Role.USER || decodedToken.role === user_interface_1.Role.GUIDE) {
+        if (decodedToken.role === user_interface_1.Role.USER || decodedToken.role === user_interface_1.Role.AGENT) {
             throw new AppError_1.default(http_status_codes_1.default.FORBIDDEN, "You are not authorized");
         }
         if (payload.role === user_interface_1.Role.SUPER_ADMIN && decodedToken.role === user_interface_1.Role.ADMIN) {
@@ -65,7 +72,7 @@ const updateUser = (userId, payload, decodedToken) => __awaiter(void 0, void 0, 
         }
     }
     if (payload.isActive || payload.isDeleted || payload.isVerified) {
-        if (decodedToken.role === user_interface_1.Role.USER || decodedToken.role === user_interface_1.Role.GUIDE) {
+        if (decodedToken.role === user_interface_1.Role.USER || decodedToken.role === user_interface_1.Role.AGENT) {
             throw new AppError_1.default(http_status_codes_1.default.FORBIDDEN, "You are not authorized");
         }
     }
@@ -76,17 +83,35 @@ const updateUser = (userId, payload, decodedToken) => __awaiter(void 0, void 0, 
     return newUpdatedUser;
 });
 const getAllUsers = () => __awaiter(void 0, void 0, void 0, function* () {
-    const users = yield user_model_1.User.find({});
-    const totalUsers = yield user_model_1.User.countDocuments();
+    const users = yield user_model_1.User.find({ role: 'USER' }); // 🔍 filter here
+    const totalUsers = yield user_model_1.User.countDocuments({ role: 'USER' }); // 🔍 same filter
     return {
         data: users,
         meta: {
-            total: totalUsers
-        }
+            total: totalUsers,
+        },
     };
+});
+const getAllAgents = () => __awaiter(void 0, void 0, void 0, function* () {
+    const agents = yield user_model_1.User.find({ role: 'AGENT' }); // 🔍 filter here
+    const totalUsers = yield user_model_1.User.countDocuments({ role: 'USER' }); // 🔍 same filter
+    return {
+        data: agents,
+        meta: {
+            total: totalUsers,
+        },
+    };
+});
+const updateAgentStatus = (agentId, isActive) => __awaiter(void 0, void 0, void 0, function* () {
+    const agent = yield user_model_1.User.findOneAndUpdate({ _id: agentId, role: 'AGENT' }, { isActive: isActive }, { new: true });
+    if (!agent)
+        throw new AppError_1.default(http_status_codes_1.default.NOT_FOUND, 'Agent not found');
+    return agent;
 });
 exports.UserService = {
     createUser,
     updateUser,
-    getAllUsers
+    getAllUsers,
+    getAllAgents,
+    updateAgentStatus
 };

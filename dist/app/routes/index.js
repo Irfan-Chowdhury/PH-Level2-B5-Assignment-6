@@ -8,6 +8,8 @@ const division_route_1 = require("../modules/division/division.route");
 const tour_route_1 = require("../modules/tour/tour.route");
 const booking_route_1 = require("../modules/booking/booking.route");
 const payment_route_1 = require("../modules/payment/payment.route");
+const wallet_route_1 = require("../modules/wallet/wallet.route");
+const transaction_route_1 = require("../modules/transaction/transaction.route");
 exports.router = (0, express_1.Router)();
 const moduleRoutes = [
     {
@@ -33,6 +35,14 @@ const moduleRoutes = [
     {
         path: "/payment",
         route: payment_route_1.PaymentRoutes
+    },
+    {
+        path: "/wallet",
+        route: wallet_route_1.WalletRoutes
+    },
+    {
+        path: "/transaction",
+        route: transaction_route_1.TransactionRoutes
     }
 ];
 moduleRoutes.forEach((route) => {

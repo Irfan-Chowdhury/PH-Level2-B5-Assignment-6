@@ -8,8 +8,8 @@ import { WalletValidation } from './wallet.validation';
 const router = express.Router();
 
 router.get('/my-wallet', 
-    checkAuth(Role.ADMIN, Role.SUPER_ADMIN),
-    WalletController.getMyWallet);  // done by admin
+    checkAuth(Role.AGENT, Role.USER),
+    WalletController.getMyWallet);  
 
 
 // Users should be able to : Add money (top-up)
