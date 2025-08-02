@@ -12,7 +12,19 @@ export const getMyTransactions = catchAsync(async (req: Request, res: Response) 
   sendResponse(res, {
     statusCode: 200,
     success: true,
-    message: 'Transaction history fetched successfully!',
+    message: 'The Transaction history fetched successfully!',
+    data: result,
+  });
+});
+
+export const getAllTransactions = catchAsync(async (req: Request, res: Response) => {
+
+  const result = await TransactionService.getAllTransactions();
+
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
+    message: 'All Transaction history fetched successfully!',
     data: result,
   });
 });

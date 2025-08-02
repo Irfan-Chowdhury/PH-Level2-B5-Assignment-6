@@ -17,7 +17,22 @@ const getMyTransactions = async (userId: string) => {
   return transactions;
 };
 
+
+
+const getAllTransactions = async () => {
+    const transactions = await Transaction.find({});
+    const totalTransactions = await Transaction.countDocuments();
+
+    return {
+        data: transactions,
+        meta: {
+            total: totalTransactions
+        }
+    };
+}
+
 export const TransactionService = {
   createTransaction,
   getMyTransactions,
+  getAllTransactions
 };

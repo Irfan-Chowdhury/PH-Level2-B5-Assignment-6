@@ -1,6 +1,6 @@
 import express from 'express';
 // import auth from '../middlewares/auth';
-import { getMyTransactions } from './transaction.controller';
+import { getAllTransactions, getMyTransactions } from './transaction.controller';
 import { checkAuth } from '../../middlewares/checkAuth';
 import { Role } from '../user/user.interface';
 
@@ -11,6 +11,12 @@ router.get(
     '/my-transactions',
     checkAuth(Role.USER),
     getMyTransactions
+);
+
+router.get(
+    '/all',
+    checkAuth(Role.ADMIN),
+    getAllTransactions
 );
 
 
