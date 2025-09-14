@@ -188,28 +188,6 @@ const cashIn = async (req: Request, agentId: string): Promise<{cashInInfo : ICas
 };
 
 
-// const cashOut = async (req: Request, userId: string): Promise<IWallet> => {
-//     const { amount } = req.body;
-
-//     const wallet = await Wallet.findOne({ user: userId });
-//     if (!wallet || wallet.balance < amount) {
-//         throw new AppError(httpStatus.BAD_REQUEST, 'Insufficient balance');
-//     }
-
-//     wallet.balance -= amount;
-//     await wallet.save();
-
-//     await Transaction.create({
-//         user: userId,
-//         type: 'cash_out',
-//         amount,
-//         status: 'completed',
-//     });
-
-//     return wallet;
-// };
-
-
 const cashOut = async (req: Request, userId: string): Promise<{cashOutInfo : ICashOutInfo}> => {
     const { amount, userPhone } = req.body;
     const agentId = userId;
