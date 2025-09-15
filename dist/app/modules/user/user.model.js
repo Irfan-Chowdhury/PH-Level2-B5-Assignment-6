@@ -30,7 +30,12 @@ const userSchema = new mongoose_1.Schema({
         default: user_interface_1.IsActive.ACTIVE,
     },
     isVerified: { type: Boolean, default: false },
-    auths: [authProviderSchema]
+    auths: [authProviderSchema],
+    // 👇 Define wallet relation (1-to-1)
+    wallet: {
+        type: mongoose_1.Types.ObjectId,
+        ref: "Wallet",
+    },
 }, {
     timestamps: true,
     versionKey: false

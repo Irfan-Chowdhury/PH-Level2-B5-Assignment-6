@@ -18,7 +18,6 @@ const getDashboardData = catchAsync(async (req: Request, res: Response, next: Ne
         statusCode: httpStatus.OK,
         message: "All dashboard data retrieve Successfully",
         data: result.data,
-        meta: result.meta,
     });
 });
 

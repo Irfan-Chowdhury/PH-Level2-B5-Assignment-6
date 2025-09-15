@@ -84,6 +84,16 @@ const suspendAgent = (0, catchAsync_1.catchAsync)((req, res) => __awaiter(void 0
         data: result,
     });
 }));
+const getProfile = (0, catchAsync_1.catchAsync)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const { userId } = req.params;
+    const result = yield user_service_1.UserService.getProfile(userId);
+    (0, sendResponse_1.sendResponse)(res, {
+        success: true,
+        statusCode: http_status_codes_1.default.OK,
+        message: "Profile retrieve Successfully",
+        data: result.data,
+    });
+}));
 exports.UserController = {
     createUser,
     updateUser,
@@ -91,5 +101,6 @@ exports.UserController = {
     getAllAgents,
     approveAgent,
     suspendAgent,
+    getProfile
 };
 // route matching --> controller --> service --> model --> DB

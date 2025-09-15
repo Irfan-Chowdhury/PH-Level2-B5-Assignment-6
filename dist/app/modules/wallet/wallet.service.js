@@ -159,22 +159,6 @@ const cashIn = (req, agentId) => __awaiter(void 0, void 0, void 0, function* () 
     };
     return { cashInInfo };
 });
-// const cashOut = async (req: Request, userId: string): Promise<IWallet> => {
-//     const { amount } = req.body;
-//     const wallet = await Wallet.findOne({ user: userId });
-//     if (!wallet || wallet.balance < amount) {
-//         throw new AppError(httpStatus.BAD_REQUEST, 'Insufficient balance');
-//     }
-//     wallet.balance -= amount;
-//     await wallet.save();
-//     await Transaction.create({
-//         user: userId,
-//         type: 'cash_out',
-//         amount,
-//         status: 'completed',
-//     });
-//     return wallet;
-// };
 const cashOut = (req, userId) => __awaiter(void 0, void 0, void 0, function* () {
     const { amount, userPhone } = req.body;
     const agentId = userId;

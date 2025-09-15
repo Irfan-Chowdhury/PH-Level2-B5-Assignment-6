@@ -133,13 +133,34 @@ root/
 
 ## 📽️ Demo & Submission
 
-* 🔗 **GitHub Repository**: [Link Here](https://github.com/Irfan-Chowdhury/PH-Level2-B5-Assignment-5)
+* 🔗 **GitHub Repository**: [Link Here](https://github.com/Irfan-Chowdhury/PH-Level2-B5-Assignment-6)
 * 🌐 **Live API Deployment**: [https://digital-wallet-api-blush.vercel.app](https://digital-wallet-api-blush.vercel.app/)
+* 🌐 **Frontend**: [https://digital-wallet-iota.vercel.app/](https://digital-wallet-iota.vercel.app//)
 * 🔗 **POSTMAN Collection**: [https://drive.google.com/file/d/10SgLgpq7p6xbph76rJvYNSrSBylHKrA9/view?usp=sharing](https://drive.google.com/file/d/10SgLgpq7p6xbph76rJvYNSrSBylHKrA9/view?usp=sharing)
 * 🔗 **Video Link**: [https://drive.google.com/file/d/13neXmU2YOuglLU3Zr-jcvJ3QXHYuXNBj/view?usp=sharing](https://drive.google.com/file/d/13neXmU2YOuglLU3Zr-jcvJ3QXHYuXNBj/view?usp=sharing)
 
 ---
 
+<br>
+
+## Credentials
+
+### Admin
+    
+    Email : admin123@gmail.com
+    Password: admin123
+    
+### User
+    
+    Email : user123@gmail.com
+    Password: user123
+    
+    
+### Agent
+    
+    Email : agent123@gmail.com
+    Password: agent123
+    
 <br>
 
 ## 📡 API Endpoints Summary

@@ -6,11 +6,16 @@ const user_route_1 = require("../modules/user/user.route");
 const auth_route_1 = require("../modules/auth/auth.route");
 const wallet_route_1 = require("../modules/wallet/wallet.route");
 const transaction_route_1 = require("../modules/transaction/transaction.route");
+const admin_route_1 = require("../modules/admin/admin.route");
 exports.router = (0, express_1.Router)();
 const moduleRoutes = [
     {
         path: "/user",
         route: user_route_1.UserRoutes
+    },
+    {
+        path: "/admin",
+        route: admin_route_1.AdminRoutes
     },
     {
         path: "/auth",

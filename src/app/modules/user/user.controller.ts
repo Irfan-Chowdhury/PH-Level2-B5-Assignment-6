@@ -102,7 +102,6 @@ const approveAgent = catchAsync(async (req: Request, res) => {
         statusCode: httpStatus.OK,
         message: "Profile retrieve Successfully",
         data: result.data,
-        meta: result.meta,
     });
 });
 
