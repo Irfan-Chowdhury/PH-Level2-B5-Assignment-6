@@ -1,4 +1,4 @@
-import { model, Schema } from "mongoose";
+import { model, Schema, Types } from "mongoose";
 import { IAuthProvider, IsActive, IUser, Role } from "./user.interface";
 // import { string } from "zod";
 
@@ -31,7 +31,12 @@ const userSchema = new Schema<IUser>(
             default: IsActive.ACTIVE,
         },
         isVerified: { type: Boolean, default: false },
-        auths : [authProviderSchema]
+        auths : [authProviderSchema],
+        // 👇 Define wallet relation (1-to-1)
+        wallet: {
+            type: Types.ObjectId,
+            ref: "Wallet",
+        },
     },
     {
         timestamps: true,

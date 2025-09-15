@@ -125,11 +125,25 @@ const updateAgentStatus = async (
 };
 
 
+const getProfile = async (userId: string) => {
+      // Find user by ID and exclude sensitive fields
+    const user = await User.findById(userId).select("-password");
+
+    if (!user) {
+        throw new Error("User not found");
+    }
+
+    return {
+        data: user
+    };
+};
+
 
 export const UserService = {
     createUser,
     updateUser,
     getAllUsers,
     getAllAgents,
-    updateAgentStatus
+    updateAgentStatus,
+    getProfile
 }

@@ -3,8 +3,8 @@ import { Types } from "mongoose";
 export interface IWallet {
   // _id?: Types.ObjectId;
   user: Types.ObjectId;
-//   from?: string | Types.ObjectId;  
-//   to?: string | Types.ObjectId;   
+  // from?: string | Types.ObjectId;  
+  // to?: string | Types.ObjectId;   
   balance: number;
   isBlocked: boolean;
   createdAt?: Date;

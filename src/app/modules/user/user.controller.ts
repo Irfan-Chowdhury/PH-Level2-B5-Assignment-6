@@ -91,6 +91,21 @@ const approveAgent = catchAsync(async (req: Request, res) => {
     });
   });
 
+
+  const getProfile = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+    const { userId } = req.params;
+
+    const result = await UserService.getProfile(userId);
+
+    sendResponse(res, {
+        success : true,
+        statusCode: httpStatus.OK,
+        message: "Profile retrieve Successfully",
+        data: result.data,
+        meta: result.meta,
+    });
+});
+
   
 
 export const UserController = {
@@ -100,6 +115,7 @@ export const UserController = {
     getAllAgents,
     approveAgent,
     suspendAgent,
+    getProfile
 }
 
 
