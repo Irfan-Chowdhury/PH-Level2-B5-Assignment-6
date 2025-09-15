@@ -21,7 +21,7 @@ exports.createUserZodSchema = zod_1.default.object({
     password: zod_1.default
         // .string({ invalid_type_error: "Password must be string" })
         .string()
-        .min(8, { message: "Password must be at least 8 characters long." })
+        .min(5, { message: "Password must be at least 8 characters long." })
         // .regex(/^(?=.*[A-Z])/, {
         //     message: "Password must contain at least 1 uppercase letter.",
         // })
