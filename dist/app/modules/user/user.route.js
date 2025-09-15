@@ -14,4 +14,5 @@ router.get("/all-users", (0, checkAuth_1.checkAuth)(user_interface_1.Role.ADMIN,
 router.get("/all-agents", (0, checkAuth_1.checkAuth)(user_interface_1.Role.ADMIN, user_interface_1.Role.SUPER_ADMIN), user_controller_1.UserController.getAllAgents);
 router.get("/approve-agent/:agentId", (0, checkAuth_1.checkAuth)(user_interface_1.Role.ADMIN, user_interface_1.Role.SUPER_ADMIN), user_controller_1.UserController.approveAgent);
 router.get("/suspend-agent/:agentId", (0, checkAuth_1.checkAuth)(user_interface_1.Role.ADMIN, user_interface_1.Role.SUPER_ADMIN), user_controller_1.UserController.suspendAgent);
+router.get("/profile/:userId", user_controller_1.UserController.getProfile);
 exports.UserRoutes = router;

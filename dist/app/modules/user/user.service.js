@@ -108,10 +108,21 @@ const updateAgentStatus = (agentId, isActive) => __awaiter(void 0, void 0, void 
         throw new AppError_1.default(http_status_codes_1.default.NOT_FOUND, 'Agent not found');
     return agent;
 });
+const getProfile = (userId) => __awaiter(void 0, void 0, void 0, function* () {
+    // Find user by ID and exclude sensitive fields
+    const user = yield user_model_1.User.findById(userId).select("-password");
+    if (!user) {
+        throw new Error("User not found");
+    }
+    return {
+        data: user
+    };
+});
 exports.UserService = {
     createUser,
     updateUser,
     getAllUsers,
     getAllAgents,
-    updateAgentStatus
+    updateAgentStatus,
+    getProfile
 };
