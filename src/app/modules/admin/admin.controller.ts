@@ -10,6 +10,18 @@ import { AdminService } from "./admin.service";
 
 
 
+const getDashboardData = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+    const result = await AdminService.getDashboardStats();
+
+    sendResponse(res, {
+        success : true,
+        statusCode: httpStatus.OK,
+        message: "All dashboard data retrieve Successfully",
+        data: result.data,
+        meta: result.meta,
+    });
+});
+
 const getAllTransactions = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
     const result = await AdminService.getAllTransactions();
 
@@ -19,6 +31,17 @@ const getAllTransactions = catchAsync(async (req: Request, res: Response, next: 
         message: "All transactions retrieve Successfully",
         data: result.data,
         meta: result.meta,
+    });
+});
+
+const getAllListing = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+    const result = await AdminService.getAllListing();
+
+    sendResponse(res, {
+        success : true,
+        statusCode: httpStatus.OK,
+        message: "All Listing retrieve Successfully",
+        data: result.data,
     });
 });
 
@@ -103,6 +126,8 @@ const getAllTransactions = catchAsync(async (req: Request, res: Response, next: 
 
 export const AdminController = {
     getAllTransactions,
+    getAllListing,
+    getDashboardData
     // updateUser,
     // getAllUsers,
     // getAllAgents,
