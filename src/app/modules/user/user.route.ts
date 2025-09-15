@@ -8,6 +8,7 @@ import { createUserZodSchema, updateUserZodSchema } from "./user.validation";
 const router = Router();
 
 
+
 router.post("/register", 
     validateRequest(createUserZodSchema), 
     UserController.createUser);
@@ -35,6 +36,10 @@ router.get("/suspend-agent/:agentId",
     UserController.suspendAgent
 );
 
+
+router.get("/profile/:userId", 
+    UserController.getProfile
+);
 
 
 

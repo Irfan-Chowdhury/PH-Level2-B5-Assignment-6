@@ -162,6 +162,7 @@ root/
 | GET    | `/api/v1/user/all-agents`                 | Admin: get all agents    |
 | GET  | `/api/v1/user/approve-agent/:agentId` | Admin: Approve agent     |
 | GET  | `/api/v1/user/suspend-agent/:agentId` | Admin: Suspend agent     |
+| GET  | `/api/v1/user/profile/:userId` | Get User Own Profile     |
 
 ---
 
@@ -169,6 +170,7 @@ root/
 
 | Method | Endpoint                               | Description              |
 | ------ | -------------------------------------- | ------------------------ |
+| GET    | `/api/v1/admin/dashboard`           | Get all dashboard details |
 | GET    | `/api/v1/admin/transactions`           | Get all transaction details |
 | GET    | `/api/v1/admin/listings`           | Get all listing details |
 ---
